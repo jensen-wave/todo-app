@@ -52,7 +52,8 @@ public class TodoServiceImpl implements TodoService {
         todo.setTitle(todoDTO.getTitle());
         todo.setDescription(todoDTO.getDescription());
         todo.setCompleted(todoDTO.getCompleted());
-        return modelMapper.map(todo, TodoDTO.class);
+        Todo save = todoRepository.save(todo);
+        return modelMapper.map(save, TodoDTO.class);
     }
 
     @Override
