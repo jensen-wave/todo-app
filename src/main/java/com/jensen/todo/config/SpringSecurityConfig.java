@@ -35,7 +35,7 @@ public class SpringSecurityConfig {
                     // authorize.requestMatchers(HttpMethod.GET,"/api/**").hasAnyRole("ADMIN","USER");
                     // authorize.requestMatchers(HttpMethod.PATCH,"/api/**").hasAnyRole("ADMIN","USER");
                     // authorize.requestMatchers(HttpMethod.GET,"/api/**").permitAll();
-
+                    authorize.requestMatchers("/api/auth/**").permitAll();
                     authorize.anyRequest().authenticated(); // 所有請求都需要驗證
                 })
                 .httpBasic(Customizer.withDefaults()); // 使用 HTTP Basic 認證（帳密輸入在 header 中）
