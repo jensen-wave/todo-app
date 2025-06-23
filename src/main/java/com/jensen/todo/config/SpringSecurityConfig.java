@@ -1,5 +1,7 @@
 package com.jensen.todo.config;
 
+import com.jensen.todo.security.JwtAuthenticationEntryPoint;
+import com.jensen.todo.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +18,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableMethodSecurity  // 開啟方法層級的安全性註解，如 @PreAuthorize()
 @Configuration         // 表示這是一個 Spring 設定類別
 @AllArgsConstructor    // 自動為所有成員生成建構子（用於建構式注入）
 public class SpringSecurityConfig {
 
-    private UserDetailsService userDetailsService;  // 注入自定義的 UserDetailsService（Spring Security 將自動使用它）
+    // 注入自定義的 UserDetailsService（Spring Security 將自動使用它）
+    private UserDetailsService userDetailsService;
+
+    // 注入自訂的認證入口點
+    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+
+    // 注入自訂的認證過濾器
+    private JwtAuthenticationFilter authenticationFilter;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,6 +50,16 @@ public class SpringSecurityConfig {
                     authorize.anyRequest().authenticated(); // 所有請求都需要驗證
                 })
                 .httpBasic(Customizer.withDefaults()); // 使用 HTTP Basic 認證（帳密輸入在 header 中）
+
+        // 設定異常處理，特別是針對認證入口點
+        http.exceptionHandling( exception -> exception
+                .authenticationEntryPoint(authenticationEntryPoint));
+
+        // 將我們的 JWT 過濾器加到 Spring Security 的過濾器鏈中
+        // 並且指定它要在 UsernamePasswordAuthenticationFilter 之前執行
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
         return http.build();  // 建立並返回安全性過濾器鏈
     }
 
