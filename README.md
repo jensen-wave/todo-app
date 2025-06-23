@@ -1,9 +1,5 @@
 # 📝 Todo Management Backend API
 
-![Java](https://img.shields.io/badge/Java-17+-blue?style=flat-square\&logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen?style=flat-square\&logo=springboot)
-![JWT](https://img.shields.io/badge/JWT-Authorization-blueviolet?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
 ## 📌 專案簡介
 
